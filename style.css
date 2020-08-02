@@ -61,6 +61,19 @@ button {
   border-radius: 5px;
   cursor: pointer;
   background: rgb(199, 199, 199);
+  transition: all 0.5s ease;
+}
+
+button:hover {
+  filter: brightness(114%);
+}
+
+button:active {
+  transform: scale(0.9, 0.9);
+}
+
+button:focus {
+  outline: none;
 }
 
 .calculator-buttons {
@@ -79,10 +92,6 @@ button {
 .clear {
   background: rgb(252, 40, 40);
   color: white;
-}
-
-.clear:hover {
-  filter: brightness(90%);
 }
 
 .equal-sign {
