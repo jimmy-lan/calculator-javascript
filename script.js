@@ -16,9 +16,7 @@ inputButtons.forEach((inputButton) => {
       sendNumber(inputButton.value);
     });
   } else if (inputButton.classList.contains("decimal"))
-    inputButton.addEventListener("click", () => {
-      sendNumber(inputButton.value);
-    });
+    inputButton.addEventListener("click", addDecimal);
 });
 
 // Helper Functions
@@ -30,4 +28,10 @@ function sendNumber(number) {
 
 function resetDisplay() {
   calculatorDisplay.textContent = "0";
+}
+
+function addDecimal() {
+  if (!calculatorDisplay.textContent.includes(".")) {
+    calculatorDisplay.textContent += ".";
+  }
 }
