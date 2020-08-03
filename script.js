@@ -1,7 +1,7 @@
 // Global variables
-let firstValue = 0;
+let calculationValues = [0];
 let operatorValue = "";
-let awaitingNextValue = false;
+let shouldRetype = false;
 
 // Selectors
 const calculatorDisplay = document.querySelector(".calculator h1");
@@ -30,43 +30,48 @@ const calculate = {
   "*": (a, b) => a * b,
   "+": (a, b) => a + b,
   "-": (a, b) => a - b,
-  "=": (a, b) => b,
 };
 
 // Helper Functions
 function sendNumber(number) {
-  if (awaitingNextValue) {
+  if (operatorValue && shouldRetype) {
     calculatorDisplay.textContent = number;
-    awaitingNextValue = false;
+    calculationValues[1] = Number(number);
+    shouldRetype = false;
   } else {
-    const displayValue = calculatorDisplay.textContent;
-    calculatorDisplay.textContent =
-      displayValue === "0" ? number : displayValue + number;
+    const oldDisplayValue = calculatorDisplay.textContent;
+    const newDisplayValue =
+      oldDisplayValue === "0" ? number : oldDisplayValue + number;
+    calculatorDisplay.textContent = newDisplayValue;
+    if (operatorValue) {
+      calculationValues[1] = Number(newDisplayValue);
+    } else {
+      calculationValues[0] = Number(newDisplayValue);
+    }
   }
 }
 
 function useOperator(operator) {
-  if (operatorValue && awaitingNextValue) {
-    operatorValue = operatorValue;
+  shouldRetype = true;
+
+  if (calculationValues.length === 1) {
+    operatorValue = operator;
     return;
   }
 
-  const currentValue = Number(calculatorDisplay.textContent);
-  if (!firstValue) {
-    firstValue = currentValue;
-  } else {
-    const result = calculate[operatorValue](firstValue, currentValue);
-    calculatorDisplay.textContent = result;
-    firstValue = result;
-  }
-  awaitingNextValue = true;
+  const result = calculate[operatorValue](
+    calculationValues[0],
+    calculationValues[1]
+  );
+  calculationValues = [result];
   operatorValue = operator;
+
+  calculatorDisplay.textContent = result;
 }
 
 function resetDisplay() {
-  firstValue = 0;
+  calculationValues = [0];
   operatorValue = "";
-  awaitingNextValue = false;
   calculatorDisplay.textContent = "0";
 }
 
