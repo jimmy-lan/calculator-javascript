@@ -59,10 +59,15 @@ function useOperator(operator) {
     return;
   }
 
-  const result = calculate[operatorValue](
+  // calculate result
+  let result = calculate[operatorValue](
     calculationValues[0],
     calculationValues[1]
   );
+
+  // round result to eliminate floating point number precision error
+  result = Math.round((result + Number.EPSILON) * 1000000) / 1000000;
+
   calculationValues = [result];
   operatorValue = operator;
 
@@ -76,9 +81,6 @@ function resetDisplay() {
 }
 
 function addDecimal() {
-  // Do not add decimal point when an operator is pressed
-  if (awaitingNextValue) return;
-
   if (!calculatorDisplay.textContent.includes(".")) {
     calculatorDisplay.textContent += ".";
   }
